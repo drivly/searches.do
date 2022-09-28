@@ -1,10 +1,10 @@
-# worker.templates.do - Cloudflare Worker Project Template
+# searches.do - Searches Primitive for Developer-First APIs
 
 ## Getting Started
 
 If you don't already have a browser extension to pretty-print JSON and make links clickable, start by installing that: <https://extensions.do>
 
-Then you interactively use the API at: <https://worker.templates.do/api>
+Then you interactively use the API at: <https://searches.do/api>
 
 ```json
 {
