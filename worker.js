@@ -1,18 +1,18 @@
 export const api = {
   icon: '🚀',
-  name: 'templates.do',
-  description: 'Cloudflare Worker Template',
-  url: 'https://templates.do/api',
-  type: 'https://apis.do/templates',
+  name: 'searches.do',
+  description: 'Searches Primitive for Developer-First APIs',
+  url: 'https://searches.do/api',
+  type: 'https://apis.do/primitives',
   endpoints: {
     listCategories: 'https://templates.do/api',
     getCategory: 'https://templates.do/:type',
   },
-  site: 'https://templates.do',
-  login: 'https://templates.do/login',
-  signup: 'https://templates.do/signup',
-  subscribe: 'https://templates.do/subscribe',
-  repo: 'https://github.com/drivly/templates.do',
+  site: 'https://searches.do',
+  login: 'https://searches.do/login',
+  signup: 'https://searches.do/signup',
+  subscribe: 'https://searches.do/subscribe',
+  repo: 'https://github.com/drivly/searches.do',
 }
 
 export const gettingStarted = [
