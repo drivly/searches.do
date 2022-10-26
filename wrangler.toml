@@ -1,9 +1,31 @@
-name = "searches-do"
+name = "searches.do"
 route = { pattern = "*/*", zone_name = "searches.do" }
-main = "worker.js"
+worker_dev = false
 usage_model = "unbound"
-compatibility_date = "2022-09-23"
+account_id = "2dcc5a4f486a50625b4167e90d113158"
+main = "dist/index.mjs"
+compatibility_date = "2022-08-25"
+
+kv_namespaces = [
+	{ binding = "DOCUMENT_STORE", id = "9e05323a3c3c44f189736a3107818e7f" }
+]
+
+[build]
+command = "npm run build"
+
+[build.upload]
+format = "modules"
 
 services = [
-  { binding = "CTX", service = "ctx-do", environment = "production" }
 ]
+
+[durable_objects]
+bindings = [ { name = "TextSearchDO", class_name = "TextSearchDO"} ]
+
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["TextSearchDO"]
+
+[miniflare]
+durable_objects_persist = "./data/"  
+kv_persist = "./data/"
