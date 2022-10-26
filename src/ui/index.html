@@ -1,0 +1,130 @@
+<!--
+	A vue app to test our API on.
+	We're going to use Tailwind CSS for styling to make it look good.
+
+	This is for sure quick and dirty. Sure i could have used a build tool, but /shrug.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Search.do Explorer 🚀</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+
+		<!-- Load Vue before our app -->
+		<script src="https://unpkg.com/vue"></script>
+
+		<!-- Load Axios for making HTTP requests -->
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+		<!-- Load Inter from Google Fonts and set it as our global font. -->
+		<link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700" rel="stylesheet">
+		<style>
+			* {
+				font-family: 'Inter', sans-serif;
+			}
+		</style>
+
+		<!-- Now for some OpenGraph tags for embedding on other sites -->
+		<meta property="og:title" content="Search.do Explorer 🚀">
+		<meta property="og:description" content="A simple app to test the search.do API.">
+		<meta property="og:image" content="https://images.unsplash.com/photo-1501526029524-a8ea952b15be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80">
+		<!-- Twitter OpenGraph -->
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:site" content="@drivly">
+		<meta name="twitter:title" content="Search.do Explorer 🚀">
+		<meta name="twitter:description" content="A simple app to test the search.do API.">
+		<meta name="twitter:image" content="https://images.unsplash.com/photo-1501526029524-a8ea952b15be?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80">
+		
+	</head>
+
+	<body id="app" class="bg-neutral-900 min-h-screen">
+		<div class="p-8 max-w-xl mx-auto">
+			<h4 class="text-white font-bold text-2xl text-purple-500">
+				Search.do Explorer 🚀
+			</h4>
+
+			<p class="font-medium text-gray-200 my-4">
+				Search.do is a full text search engine built on top of Cloudflare Workers. Example databases include the Cloudflare Workers documentation under <code class="text-purple-500 bg-purple-500/10">cloudflare-docs</code>
+			</p>
+
+			<div class="flex flex-row rounded-md overflow-hidden mt-4 mb-2">
+				<input
+					type="text"
+					class="p-3 bg-neutral-800 text-white ring-0 border-0 outline-none border-r-2 border-neutral-900" 
+					style="max-width:9em;"
+					placeholder="Database..."
+					v-model="database"
+					@keyup.enter="search"
+				/>
+
+				<input
+					type="text"
+					class="w-full p-3 bg-neutral-800 text-white flex-grow ring-0 border-0 outline-none" 
+					placeholder="Query to search the database for..." 
+					v-model="query"
+					@keyup.enter="search"
+				/>
+			</div>
+
+			<div class="font-medium text-sm text-gray-200 mb-8">
+				Showing {{results.length}} out of {{count}} total documents.
+			</div>
+
+			<div v-if="loading">
+				<div class="flex flex-row items-center">
+					<div class="animate-spin rounded-full h-3 w-3 border-b-2 border-purple-500 mr-3"></div>
+					<p class="text-gray-200">Loading...</p>
+				</div>				
+			</div>
+
+			<div v-for="result in results" class="bg-neutral-800/50 rounded-md overflow-hidden p-4 text-gray-200 text-sm mb-2">
+				<p v-if="result.metadata.author.username" class="block mb-2 text-lg font-medium">
+					{{ result.metadata.author.name }} (@{{result.metadata.author.username}})
+				</p>
+
+				<p class="block mb-2 font-medium">
+					{{result.preview_text}}
+				</p>
+
+				<!-- Mostly used to show Tweets. -->
+				<img v-if="(result?.metadata?.media || []).length" :src="result.metadata.media[0].url" class="rounded-md mt-4 mb-2"/>
+				
+				<p class="text-green-500 font-medium">
+					Relevance: {{result.relevance}}
+				</p>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		const { searchParams } = new URL(window.location)
+
+		var app = Vue.createApp({
+			data: () => ({
+				query: searchParams.get('q') || '',
+				database: searchParams.get('db') || 'cloudflare-docs',
+				results: [],
+				count: 'unknown',
+				loading: false
+			}),
+			methods: {
+				async search() {
+					this.loading = true
+					window.history.replaceState({}, document.title, `/api/explore?db=${this.database}&q=${this.query}`)
+					const { results, count } = await axios.get(`../../${this.database}/search?q=${this.query}&includes=count`).then(r => r.data).finally(() => this.loading = false)
+
+					this.results = results
+					this.count = count
+				}
+			}
+		})
+		
+		// wait until the DOM is ready
+		document.addEventListener('DOMContentLoaded', () => {
+			app.mount('#app')
+		})
+	</script>
+</html>
