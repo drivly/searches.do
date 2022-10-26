@@ -1,4 +1,4 @@
-name = "searches.do"
+name = "searches-do"
 route = { pattern = "*/*", zone_name = "searches.do" }
 worker_dev = false
 usage_model = "unbound"
