@@ -1,5 +1,5 @@
 name = "searches-do"
-route = { pattern = "*/*", zone_name = "searches.do" }
+route = { pattern = "searches.do/*", zone_name = "searches.do" }
 usage_model = "unbound"
 main = "dist/index.mjs"
 compatibility_date = "2022-08-25"
