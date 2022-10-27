@@ -6,7 +6,7 @@ main = "dist/index.mjs"
 compatibility_date = "2022-08-25"
 
 kv_namespaces = [
-	{ binding = "DOCUMENT_STORE", id = "9e05323a3c3c44f189736a3107818e7f" }
+	{ binding = "DOCUMENT_STORE", id = "c19828a92fb742b780a7f11fbec15270" }
 ]
 
 [build]
