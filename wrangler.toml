@@ -3,6 +3,7 @@ route = { pattern = "searches.do/*", zone_name = "searches.do" }
 usage_model = "unbound"
 main = "dist/index.mjs"
 compatibility_date = "2022-08-25"
+logpush = true
 
 kv_namespaces = [
 	{ binding = "DOCUMENT_STORE", id = "c19828a92fb742b780a7f11fbec15270" }
